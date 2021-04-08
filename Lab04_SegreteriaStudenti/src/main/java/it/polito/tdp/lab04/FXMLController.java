@@ -14,7 +14,7 @@ import javafx.scene.control.TextField;
 
 public class FXMLController {
 	
-	private Model model;
+	private Model segreteria;
 
     @FXML
     private ResourceBundle resources;
@@ -23,7 +23,7 @@ public class FXMLController {
     private URL location;
 
     @FXML
-    private ComboBox<?> comboCorsi;
+    private ComboBox<String> comboCorsi;
 
     @FXML
     private Button btnCercaIscrittiCorso;
@@ -57,6 +57,20 @@ public class FXMLController {
 
     @FXML
     void doActivation(ActionEvent event) {
+    	
+    	if(comboCorsi.getValue() != null) {
+    		
+    		btnCercaIscrittiCorso.setDisable(false);
+    		
+    		txtMatricola.setDisable(false);
+    		CheckCompletaStudente.setDisable(false);
+    		
+    		btnCercaCorsi.setDisable(false);
+    		btnIscrivi.setDisable(false);
+    		
+    	}else {
+    		txtResult.setText("SELEZIONARE UN CORSO DALLA TENDINA O LO SPAZIO VUOTO");
+    	}
 
     }
 
@@ -72,12 +86,56 @@ public class FXMLController {
 
     @FXML
     void doCheckCompleta(ActionEvent event) {
-
+    	
+    	txtNome.clear();
+    	txtCognome.clear();
+    	txtResult.clear();
+    	
+    	
+    	Integer matricola;
+    	
+    	try {
+    		matricola = Integer.parseInt(txtMatricola.getText());
+    	}
+    	catch(NumberFormatException e){
+    		txtResult.setText("ERRORE! LA MATRICOLA DEVE CONTENERE SOLO CARATTERI NUMERICI");
+    		return;
+    	}
+    	
+    	if(segreteria.getCognomeStudente(matricola)!= null) {
+    		
+    		txtNome.setDisable(false);
+    		txtCognome.setDisable(false);
+    		
+    		txtNome.setText(segreteria.getNomeStudente(matricola));
+    		txtCognome.setText(segreteria.getCognomeStudente(matricola));
+    	}
+    	else {
+    		txtResult.setText("ERRORE! MATRICOLA NON PRESENTE NEL DATABASE");
+    		return;
+    	}
     }
 
     @FXML
     void doCompletaStudente(ActionEvent event) {
-
+    	Integer matricola;
+    	
+    	try {
+    		matricola = Integer.parseInt(txtMatricola.getText());
+    	}
+    	catch(NumberFormatException e){
+    		txtResult.setText("ERRORE! LA MATRICOLA DEVE CONTENERE SOLO CARATTERI NUMERICI");
+    		return;
+    	}
+    	
+    	if(segreteria.getCognomeStudente(matricola)!= null) {
+    		txtNome.setText(segreteria.getNomeStudente(matricola));
+    		txtCognome.setText(segreteria.getCognomeStudente(matricola));
+    	}
+    	else {
+    		txtResult.setText("ERRORE! MATRICOLA NON PRESENTE NEL DATABASE");
+    		return;
+    	}
     }
 
     @FXML
@@ -105,4 +163,25 @@ public class FXMLController {
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Scene.fxml'.";
 
     }
+
+	public void setModel(Model model) {
+		
+		comboCorsi.getItems().addAll(model.getTuttiICorsiString()); 
+		
+		btnCercaIscrittiCorso.setDisable(true);
+		
+		txtMatricola.setDisable(true);
+		CheckCompletaStudente.setDisable(true);
+		txtNome.setDisable(true);
+		txtCognome.setDisable(true);
+		
+		btnCercaCorsi.setDisable(true);
+		btnIscrivi.setDisable(true);
+		
+		txtResult.setDisable(true);
+		
+		btnReset.setDisable(true);
+		
+		this.segreteria = model;
+	}
 }

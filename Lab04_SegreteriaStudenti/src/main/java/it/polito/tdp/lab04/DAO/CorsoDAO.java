@@ -56,7 +56,40 @@ public class CorsoDAO {
 			throw new RuntimeException("Errore Db", e);
 		}
 	}
-	
+	public List<String> getTuttiICorsiString() {
+
+		final String sql = "SELECT * FROM corso";
+
+		List<String> corsi = new LinkedList<String>();
+		corsi.add("");
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				// Crea un nuovo JAVA Bean Corso
+				// Aggiungi il nuovo oggetto Corso alla lista corsi
+				
+				Corso c = new Corso(rs.getString("codins"), rs.getInt("crediti"), rs.getString("nome"), rs.getInt("pd"));
+				corsi.add(c.getCodins()+" "+c.getNome());
+			}
+
+			conn.close();
+			st.close();
+			rs.close();
+			
+			return corsi;
+			
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db", e);
+		}
+	}
 	
 	/*
 	 * Dato un codice insegnamento, ottengo il corso

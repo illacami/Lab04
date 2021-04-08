@@ -10,9 +10,14 @@ public class TestModel {
 		 * 	Write here your test model
 		 */
 
-		model.getTuttiICorsi();
+		for(Corso c : model.getTuttiICorsi())
+			System.out.println(c.getCodins());
 		
-		model.getNomeECogmome(146101);
+		
+		System.out.println(model.getCognomeStudente(146101));
+		
+		for(String corso :model.getTuttiICorsiString())
+			System.out.println(corso);
 	}
 	
 

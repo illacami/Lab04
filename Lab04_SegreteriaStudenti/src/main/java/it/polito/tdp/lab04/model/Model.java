@@ -12,17 +12,31 @@ public class Model {
 	
 	
 	public Model() {
-		super();
-		this.corsoDao = corsoDao;
-		this.studenteDao = studenteDao;
+		corsoDao = new CorsoDAO();
+		studenteDao = new StudenteDAO();
 	}
 	
 	public List<Corso> getTuttiICorsi(){
 		return corsoDao.getTuttiICorsi();
 	}
 	
-	public Studente getNomeECogmome(Integer matricola) {
-		return studenteDao.completamentoStudente(matricola);
+	public List<String> getTuttiICorsiString(){
+		return corsoDao.getTuttiICorsiString();
+	}
+	
+	public String getNomeStudente(Integer matricola) {
+		
+		if(studenteDao.completamentoStudente(matricola) != null)
+			return studenteDao.completamentoStudente(matricola).getNome();
+		
+		return null;
 	}
 
+	public String getCognomeStudente(Integer matricola) {
+		
+		if(studenteDao.completamentoStudente(matricola) != null)
+			return studenteDao.completamentoStudente(matricola).getCognome();
+		
+		return null;
+	}
 }
