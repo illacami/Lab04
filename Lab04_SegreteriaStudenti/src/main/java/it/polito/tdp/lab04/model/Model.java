@@ -24,7 +24,7 @@ public class Model {
 		return corsoDao.getTuttiICorsiString();
 	}
 	
-	public String getNomeStudente(Integer matricola) {
+	public String getNomeStudente(String matricola) {
 		
 		if(studenteDao.completamentoStudente(matricola) != null)
 			return studenteDao.completamentoStudente(matricola).getNome();
@@ -32,7 +32,7 @@ public class Model {
 		return null;
 	}
 
-	public String getCognomeStudente(Integer matricola) {
+	public String getCognomeStudente(String matricola) {
 		
 		if(studenteDao.completamentoStudente(matricola) != null)
 			return studenteDao.completamentoStudente(matricola).getCognome();
@@ -46,5 +46,9 @@ public class Model {
 	
 	public List<Studente> getStudentiIscrittiAlCorso(String codins){
 		return corsoDao.getStudentiIscrittiAlCorso(codins);
+	}
+	
+	public List<Corso> getCorsiDelloStudente(String matricola){
+		return studenteDao.getCorsiDelloStudente(matricola);
 	}
 }

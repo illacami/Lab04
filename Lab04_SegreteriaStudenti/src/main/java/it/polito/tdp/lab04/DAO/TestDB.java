@@ -22,7 +22,7 @@ public class TestDB {
 		
 		
 		System.out.println("\n \n ***** STAMPO IL NOME DELLO STUDENTE 146101 *****");
-		System.out.println(sdao.completamentoStudente(146101).getNome());
+		System.out.println(sdao.completamentoStudente("146101").getNome());
 		
 		
 		System.out.println("\n \n ***** CERCO IL CORSO : 01KSUPG *****");
@@ -32,6 +32,15 @@ public class TestDB {
 		System.out.println("\n \n ***** STAMPO GLI STUDENTI ISCRITTI AL CORSO : 01KSUPG *****");
 		for(Studente s : cdao.getStudentiIscrittiAlCorso("01KSUPG"))
 			System.out.println(s);
+		
+		
+		System.out.println("\n \n ***** STAMPO I CORSI A CUI E' ISCRITTO UNO STUDENTE *****");
+		System.out.println("\n 170277");
+		for(Corso c : sdao.getCorsiDelloStudente("170277"))
+			System.out.println(c);
+		System.out.println("\n 146101");
+		for(Corso c : sdao.getCorsiDelloStudente("146101"))
+			System.out.println(c);
 	}
 
 }

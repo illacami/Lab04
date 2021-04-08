@@ -18,7 +18,7 @@ public class TestModel {
 		
 		System.out.println("\n \n ***** STAMPO IL COGNOME DELLO STUDENTE 146101 *****");
 		
-		System.out.println(model.getCognomeStudente(146101));
+		System.out.println(model.getCognomeStudente("146101"));
 		
 		
 		System.out.println("\n \n ***** STAMPO TUTTI I CORSI *****");
@@ -36,6 +36,14 @@ public class TestModel {
 		
 		for(Studente s : model.getStudentiIscrittiAlCorso("01KSUPG"))
 			System.out.println(s);
+		
+		System.out.println("\n \n ***** STAMPO I CORSI A CUI E' ISCRITTO UNO STUDENTE *****");
+		System.out.println("\n 170277");
+		for(Corso c : model.getCorsiDelloStudente("170277"))
+			System.out.println(c);
+		System.out.println("\n 146101");
+		for(Corso c : model.getCorsiDelloStudente("146101"))
+			System.out.println(c);
 		
 	}
 	

@@ -3,6 +3,7 @@ package it.polito.tdp.lab04;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Model;
 import it.polito.tdp.lab04.model.Studente;
 import javafx.event.ActionEvent;
@@ -66,6 +67,7 @@ public class FXMLController {
     		btnCercaCorsi.setDisable(false);
     		btnIscrivi.setDisable(false);
     		
+    		btnReset.setDisable(false);
     	}else {
     		txtResult.setText("SELEZIONARE UN CORSO DALLA TENDINA O LO SPAZIO VUOTO");
     	}
@@ -74,11 +76,41 @@ public class FXMLController {
 
     @FXML
     void doCercaCorsi(ActionEvent event) {
-
+    	
+    	txtResult.clear();
+    	
+    	//non c'è il campo matricola
+    	if(txtMatricola.getText().isBlank()) {
+    		txtResult.setText("ERRORE! INSERIRE UNA MATRICOLA");
+    		return;
+    	}
+    	
+    	String matricola = txtMatricola.getText();
+    	
+    	//matricola inesistente nel db
+    	if(segreteria.getNomeStudente(matricola) == null) {
+    		txtResult.setText("MATRICOLA INESISTENTE, RIPROVARE");
+    		return;
+    	}
+    	
+    	//lo studente esiste ma non è iscritto a nessun corso
+    	if(segreteria.getCorsiDelloStudente(matricola).isEmpty()) {
+    		System.out.println("ATTENZIONE! Lo studente non è iscritto a nessun corso!");
+    		return;
+    	}
+    	txtResult.setStyle("-fx-font-family: monospace");
+    	StringBuilder sb = new StringBuilder();
+    	for(Corso c : segreteria.getCorsiDelloStudente(matricola)) {
+    		sb.append(c.toString());
+    	}
+    	txtResult.appendText(sb.toString());
+    	
     }
 
     @FXML
     void doCercaIscrittiCorso(ActionEvent event) {
+    	
+    	txtResult.setDisable(false);
     	
     	if(comboCorsi.getValue() == null || comboCorsi.getValue() == "") {
     		txtResult.setText("SELEZIONARE UN CORSO DAL MENU' A TENDINA");
@@ -87,19 +119,42 @@ public class FXMLController {
     	
     	String corso[] = comboCorsi.getValue().split(" ");
     	
-    	String trovati = "";
-    	
     	if(segreteria.getStudentiIscrittiAlCorso(corso[0]).isEmpty()) {
     		txtResult.setText("Nessuno studente iscritto al corso selezionato");
     	}
     	
     	try {
-    		txtResult.setDisable(false);
+    	if(txtMatricola.getText().isBlank() == false) {
     		
+    		String matricola = txtMatricola.getText();
+    		
+    		boolean flag = true;
+    		
+    		for(Corso c : segreteria.getCorsiDelloStudente(matricola)) {
+    			if(corso[0].equals(c.getCodins())) {
+    				txtResult.setText("Lo studente "+segreteria.getNomeStudente(matricola)+" "+segreteria.getCognomeStudente(matricola)+" è iscritto al corso selezionato");
+    				flag = false;
+    			}
+    		}
+    		
+    		if(flag)
+    			txtResult.setText("Lo studente "+segreteria.getNomeStudente(matricola)+" "+segreteria.getCognomeStudente(matricola)+"  NON è iscritto al corso selezionato");
+    		
+    		return;
+    	}
+    	}catch(Exception e) {
+    		txtResult.setText("ERRORE NELLA RICERCA DEGLI ISCRITTI");
+    		return;
+    	}
+    	
+    	try {
+    		txtResult.setStyle("-fx-font-family: monospace");
+        	StringBuilder sb = new StringBuilder();
+        	
     		for(Studente s : segreteria.getStudentiIscrittiAlCorso(corso[0]))
-    			trovati += s.toString()+ "\n";
+    			sb.append(s.toString());
     		
-    		txtResult.setText(trovati);	
+    		txtResult.appendText(sb.toString());	
     		
     	}catch(Exception e) {
     		txtResult.setText("ERRORE NELLA RICERCA DEGLI ISCRITTI");
@@ -116,15 +171,7 @@ public class FXMLController {
     	txtResult.clear();
     	
     	
-    	Integer matricola;
-    	
-    	try {
-    		matricola = Integer.parseInt(txtMatricola.getText());
-    	}
-    	catch(NumberFormatException e){
-    		txtResult.setText("ERRORE! LA MATRICOLA DEVE CONTENERE SOLO CARATTERI NUMERICI");
-    		return;
-    	}
+    	String matricola = txtMatricola.getText();
     	
     	if(segreteria.getCognomeStudente(matricola)!= null) {
     		
@@ -147,7 +194,13 @@ public class FXMLController {
 
     @FXML
     void doReset(ActionEvent event) {
-
+    	
+    	txtMatricola.clear();
+    	txtNome.clear();
+    	txtCognome.clear();
+    	
+    	txtResult.clear();
+    	
     }
 
     @FXML
