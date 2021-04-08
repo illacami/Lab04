@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.lab04.model.Model;
+import it.polito.tdp.lab04.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,9 +34,6 @@ public class FXMLController {
 
     @FXML
     private CheckBox CheckCompletaStudente;
-
-    @FXML
-    private Button btnCompletaStudente;
 
     @FXML
     private TextField txtNome;
@@ -81,6 +79,32 @@ public class FXMLController {
 
     @FXML
     void doCercaIscrittiCorso(ActionEvent event) {
+    	
+    	if(comboCorsi.getValue() == null || comboCorsi.getValue() == "") {
+    		txtResult.setText("SELEZIONARE UN CORSO DAL MENU' A TENDINA");
+    		return;
+    	}
+    	
+    	String corso[] = comboCorsi.getValue().split(" ");
+    	
+    	String trovati = "";
+    	
+    	if(segreteria.getStudentiIscrittiAlCorso(corso[0]).isEmpty()) {
+    		txtResult.setText("Nessuno studente iscritto al corso selezionato");
+    	}
+    	
+    	try {
+    		txtResult.setDisable(false);
+    		
+    		for(Studente s : segreteria.getStudentiIscrittiAlCorso(corso[0]))
+    			trovati += s.toString()+ "\n";
+    		
+    		txtResult.setText(trovati);	
+    		
+    	}catch(Exception e) {
+    		txtResult.setText("ERRORE NELLA RICERCA DEGLI ISCRITTI");
+    		return;
+    	}
 
     }
 
@@ -117,28 +141,6 @@ public class FXMLController {
     }
 
     @FXML
-    void doCompletaStudente(ActionEvent event) {
-    	Integer matricola;
-    	
-    	try {
-    		matricola = Integer.parseInt(txtMatricola.getText());
-    	}
-    	catch(NumberFormatException e){
-    		txtResult.setText("ERRORE! LA MATRICOLA DEVE CONTENERE SOLO CARATTERI NUMERICI");
-    		return;
-    	}
-    	
-    	if(segreteria.getCognomeStudente(matricola)!= null) {
-    		txtNome.setText(segreteria.getNomeStudente(matricola));
-    		txtCognome.setText(segreteria.getCognomeStudente(matricola));
-    	}
-    	else {
-    		txtResult.setText("ERRORE! MATRICOLA NON PRESENTE NEL DATABASE");
-    		return;
-    	}
-    }
-
-    @FXML
     void doIscrivi(ActionEvent event) {
 
     }
@@ -154,7 +156,6 @@ public class FXMLController {
         assert btnCercaIscrittiCorso != null : "fx:id=\"btnCercaIscrittiCorso\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtMatricola != null : "fx:id=\"txtMatricola\" was not injected: check your FXML file 'Scene.fxml'.";
         assert CheckCompletaStudente != null : "fx:id=\"CheckCompletaStudente\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert btnCompletaStudente != null : "fx:id=\"btnCompletaStudente\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtNome != null : "fx:id=\"txtNome\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtCognome != null : "fx:id=\"txtCognome\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnCercaCorsi != null : "fx:id=\"btnCercaCorsi\" was not injected: check your FXML file 'Scene.fxml'.";

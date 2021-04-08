@@ -75,7 +75,7 @@ public class Corso {
 
 	@Override
 	public String toString() {
-		return "Corso: " + codins +" "+ nome + "  crediti:" + crediti + "  pd:" + pd ;
+		return String.format("%-8s %-50s %-8s %-8s", codins, nome, crediti, pd) ;
 	}
 	
 	

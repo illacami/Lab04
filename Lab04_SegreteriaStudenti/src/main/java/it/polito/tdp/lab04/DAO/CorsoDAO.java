@@ -17,7 +17,7 @@ public class CorsoDAO {
 	 */
 	public List<Corso> getTuttiICorsi() {
 
-		final String sql = "SELECT * FROM corso";
+		final String sql = "SELECT * FROM corso GROUP BY codins";
 
 		List<Corso> corsi = new LinkedList<Corso>();
 
@@ -58,7 +58,7 @@ public class CorsoDAO {
 	}
 	public List<String> getTuttiICorsiString() {
 
-		final String sql = "SELECT * FROM corso";
+		final String sql = "SELECT * FROM corso GROUP BY codins";
 
 		List<String> corsi = new LinkedList<String>();
 		corsi.add("");
@@ -94,15 +94,74 @@ public class CorsoDAO {
 	/*
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
-	public void getCorso(Corso corso) {
-		// TODO
+	public Corso getCorso(String corso) {
+		
+		String sql = "SELECT * "
+				+ "FROM corso "
+				+ "WHERE codins = ? "
+				+ "GROUP BY nome ";
+		
+		Corso trovato = null;
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, corso);
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				trovato = new Corso(rs.getString("codins"), rs.getInt("crediti"), rs.getString("nome"), rs.getInt("pd"));
+			}
+			
+			
+			conn.close();
+			st.close();
+			rs.close();
+			
+			return trovato;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Errore Db", e);
+		}
 	}
 
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public void getStudentiIscrittiAlCorso(Corso corso) {
-		// TODO
+	public List<Studente> getStudentiIscrittiAlCorso(String corso) {
+		 
+		
+		String sql = "SELECT s.matricola, s.nome, s.cognome, s.CDS "
+		 		+ "FROM studente s, iscrizione i "
+		 		+ "WHERE s.matricola = i.matricola AND i.codins = ?"
+		 		+ "GROUP BY matricola ";
+		
+		List<Studente> studenti = new LinkedList<Studente>();
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, corso);
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				Studente s = new Studente(rs.getInt("matricola"), rs.getString("nome"), rs.getString("cognome"), rs.getString("CDS"));
+				studenti.add(s);
+			}
+			
+			
+			conn.close();
+			st.close();
+			rs.close();
+			
+			return studenti;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Errore Db", e);
+		}
+
 	}
 
 	/*

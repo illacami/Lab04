@@ -39,4 +39,12 @@ public class Model {
 		
 		return null;
 	}
+	
+	public Corso getCorso(String codins) {
+		return corsoDao.getCorso(codins);
+	}
+	
+	public List<Studente> getStudentiIscrittiAlCorso(String codins){
+		return corsoDao.getStudentiIscrittiAlCorso(codins);
+	}
 }

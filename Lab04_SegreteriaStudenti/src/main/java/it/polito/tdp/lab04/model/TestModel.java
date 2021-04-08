@@ -10,14 +10,33 @@ public class TestModel {
 		 * 	Write here your test model
 		 */
 
+		System.out.println("\n \n ***** STAMPO IL CODINS DI TUTTI I CORSI *****");
+		
 		for(Corso c : model.getTuttiICorsi())
 			System.out.println(c.getCodins());
 		
 		
+		System.out.println("\n \n ***** STAMPO IL COGNOME DELLO STUDENTE 146101 *****");
+		
 		System.out.println(model.getCognomeStudente(146101));
 		
-		for(String corso :model.getTuttiICorsiString())
+		
+		System.out.println("\n \n ***** STAMPO TUTTI I CORSI *****");
+		
+		for(String corso : model.getTuttiICorsiString())
 			System.out.println(corso);
+		
+		
+		System.out.println("\n \n ***** CERCO IL CORSO : 01KSUPG *****");
+		
+		System.out.println(model.getCorso("01KSUPG"));
+		
+		
+		System.out.println("\n \n ***** STAMPO GLI STUDENTI ISCRITTI AL CORSO : 01KSUPG *****");
+		
+		for(Studente s : model.getStudentiIscrittiAlCorso("01KSUPG"))
+			System.out.println(s);
+		
 	}
 	
 

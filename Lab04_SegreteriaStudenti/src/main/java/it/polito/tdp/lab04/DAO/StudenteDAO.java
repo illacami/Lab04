@@ -39,4 +39,12 @@ public class StudenteDAO {
 		
 		return result;
 	}
+	
+	public void getCorsiDelloStudente() {
+		/** SELECT
+		 * FROM corso c, iscrizione s
+		 * WHERE c.codins = i.codins AND i.matricola = "170227"
+		 */
+
+	}
 }
